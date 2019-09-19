@@ -31,7 +31,6 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ivy
      lua
      d
      ;; ----------------------------------------------------------------
@@ -343,7 +342,8 @@ you should place your code here."
   (skyfire-setup-indent 4)
 
   ;; 自动完成
-  (global-company-mode 1)
+  (add-hook 'prog-mode-hook
+            (lambda () (company-mode 1)))
   (setq company-idle-delay 0)
   (setq company-show-numbers t)
   (setq company-auto-complete nil)
