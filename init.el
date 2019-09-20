@@ -52,13 +52,19 @@ values."
      syntax-checking
      version-control
      chinese
-     skyfire
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      company-dcd
+                                      d-mode
+                                      format-all
+                                      company-tabnine
+                                      graphviz-dot-mode
+                                      counsel-etags
+                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -420,6 +426,240 @@ you should place your code here."
   (sp-local-pair 'lisp-interaction-mode "'" nil :actions nil)
 
   (setq standard-indent 4)
+
+
+  ;; 包配置
+  ;; ---------------------------------------------------------------------------------
+
+  ;; Dlang
+  (when (package-installed-p 'company-dcd)
+    (progn
+      (require 'company-dcd)
+      (add-hook 'd-mode-hook 'company-dcd-mode)
+      )
+    )
+  ;; 保存文件前格式化
+  (when (package-installed-p 'format-all)
+    (progn
+      (add-hook 'before-save-hook 'format-all-buffer
+                )
+      )
+    )
+
+  ;; 加载主题
+  (when (package-installed-p 'monokai-theme)
+    (progn
+      (load-theme 'monokai t)
+      )
+    )
+
+  (package-installed-p 'swiper)
+
+  ;; 优化删除
+  (when (package-installed-p 'hungry-delete)
+    (progn
+      (require 'hungry-delete)
+      (global-hungry-delete-mode)
+      )
+
+    )
+
+  ;; swiper 配置
+  (when (package-installed-p 'swiper)
+    (progn
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq enable-recursive-minibuffers t)
+      )
+
+    )
+
+  ;; 括号自动完成
+  (when (package-installed-p 'smartparens)
+    (progn
+      (smartparens-global-mode t)
+      )
+    )
+
+
+  ;; 自动完成
+  (add-hook 'prog-mode-hook
+            (lambda () (company-mode 1)))
+  (setq company-idle-delay 0)
+  (setq company-show-numbers t)
+  (setq company-auto-complete nil)
+  (setq company-minimum-prefix-length 1)
+  (setq company-auto-complete-chars nil)
+  (setq company-tooltip-idle-delay 0.0)
+
+  ;; 机器学习自动完成
+  (when (package-installed-p 'company-tabnine)
+    (progn
+      (require 'company-tabnine)
+      (setq company-tabnine-insert-arguments nil)
+      (setq company-tabnine-wait 0.5)
+      (add-to-list 'company-backends #'company-tabnine)
+      )
+    )
+
+  ;; 语法检查
+  (when (package-installed-p 'flycheck)
+    (progn
+      (global-flycheck-mode)
+      )
+    )
+  ;; 弹出窗
+
+  (when (package-installed-p 'popwin)
+    (progn
+      (require 'popwin)
+      (popwin-mode t)
+      )
+    )
+
+
+  ;; 侧边目录
+  (when (package-installed-p 'neotree)
+    (progn
+      (require 'neotree)
+      )
+
+    )
+
+
+  ;; 迷你图
+  (when (package-installed-p 'sublimity)
+    (progn
+      (require 'sublimity)
+      (require 'sublimity-scroll)
+      (require 'sublimity-map) ;; experimental
+      ;;(require 'sublimity-attractive)
+      (sublimity-mode t)
+      )
+
+    )
+  ;; 项目管理
+  (when (package-installed-p 'projectile)
+    (progn
+      (projectile-global-mode)
+      (setq projectile-enable-caching t)
+      )
+    )
+
+  ;; 缩进线
+  (when (package-installed-p 'indent-guide)
+    (progn
+      (indent-guide-global-mode)
+      )
+
+    )
+
+
+  ;; ---------------------------------------------------------------------------------------
+  ;; 快捷键配置
+
+
+  ;; enable this if you want `swiper' to use it
+  ;; (setq search-default-mode #'char-fold-to-regexp)
+
+  (when (package-installed-p 'swiper)
+    (progn
+      (global-set-key (kbd "C-s") 'swiper)
+      (global-set-key (kbd "C-c C-r") 'ivy-resume)
+      )
+    )
+
+  (when (package-installed-p 'counsel)
+    (progn
+      (global-set-key (kbd "M-x") 'counsel-M-x)
+      (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+      (global-set-key (kbd "C-h C-f") 'counsel-describe-function)
+      (global-set-key (kbd "C-h C-v") 'counsel-describe-variable)
+      (global-set-key (kbd "C-h C-l") 'counsel-find-library)
+      (global-set-key (kbd "C-h C-i") 'counsel-info-lookup-symbol)
+      )
+    )
+
+
+  (global-set-key (kbd "C-h C-k") 'find-function-on-key)
+
+  (when (package-installed-p 'neotree)
+    (progn
+      (global-set-key (kbd "<f8>") 'neotree-toggle)
+      )
+    )
+
+
+  ;;(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  ;;(global-set-key (kbd "C-c g") 'counsel-git)
+  ;;(global-set-key (kbd "C-c j") 'counsel-git-grep)
+  ;;(global-set-key (kbd "C-c k") 'counsel-ag)
+  ;;(global-set-key (kbd "C-x l") 'counsel-locate)
+  ;;(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  ;;(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+  ;; 打开配置文件
+  ;;(global-set-key (kbd "C-c <f1>") 'skyfire-open-init)
+  ;;(global-set-key (kbd "C-c <f2>") 'skyfire-open-init-packages)
+  ;;(global-set-key (kbd "C-c <f3>") 'skyfire-open-init-keymap)
+  ;;(global-set-key (kbd "C-c <f4>") 'skyfire-open-init-ui)
+  ;;(global-set-key (kbd "C-c <f5>") 'skyfire-open-init-better-defaults)
+  ;;(global-set-key (kbd "C-c <f6>") 'skyfire-open-init-func)
+
+  (global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
+  (global-set-key (kbd "C-S-\\") 'indent-region-or-buffer)
+
+  (global-set-key (kbd "C-S-a") 'mark-page)
+
+  (global-set-key (kbd "C-S-c") 'kill-ring-save)
+
+  (global-set-key (kbd "C-S-v") 'yank)
+
+  (global-set-key (kbd "C-S-x") 'kill-region)
+
+  (global-set-key (kbd "C-S-z") 'undo)
+
+  (global-set-key (kbd "C-S-o") 'counsel-find-file)
+
+  (global-set-key (kbd "C-S-p") 'neotree-dir)
+
+  (global-set-key (kbd "C-S-r") 'replace-string)
+
+  (global-set-key (kbd "M-S-r") 'replace-regexp)
+
+  (global-set-key (kbd "C-S-s") 'search-forward)
+
+  (global-set-key (kbd "M-S-s") 'regexp-search)
+
+  (when (package-installed-p 'ace-window)
+    (progn
+      (global-set-key (kbd "C-o") 'ace-window)
+      )
+    )
+
+  (global-set-key (kbd "C-S-g") 'goto-line)
+
+  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+
+  (when (package-installed-p 'projectile)
+    (progn
+      (global-set-key (kbd "C-S-f") 'projectile-find-file)
+      )
+    )
+
+
+  (global-set-key (kbd "C-?") 'comment-or-uncomment-region)
+
+  (when (package-installed-p 'counsel-etags)
+    (progn
+      (global-set-key (kbd "<f12>") 'counsel-etags-find-tag-at-point)
+      )
+    )
+
+  (global-set-key (kbd "s-/") 'hippie-expand)
+
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -431,7 +671,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
+    (graphviz-dot-mode format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
  '(standard-indent 8))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
