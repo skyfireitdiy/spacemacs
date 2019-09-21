@@ -31,37 +31,55 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     (go :variables go-tab-width 4)
      sql
      lua
      d
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
+
+     (c-c++ :variables
+            c-c++-default-mode-for-headers 'c++-mode
+            c-c++-enable-clang-support t
+
+            )
+
      helm
-     auto-completion
-     better-defaults
+     (auto-completion
+      :variables
+      auto-completion-return-key-behavior 'complete
+      auto-completion-tab-key-behavior 'complete
+      auto-completion-enable-snippets-in-popup t
+      auto-completion-enable-help-tooltip t
+      auto-completion-enable-sort-by-usage t
+
+      )
+
+     (better-defaults
+      :variables
+      better-defaults-move-to-beginning-of-code-first t
+      better-defaults-move-to-end-of-code-first t
+      )
      emacs-lisp
      git
      markdown
      org
      (shell :variables
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'bottom
+            shell-default-term-shell "/usr/bin/fish"
+            shell-default-full-span nil
+            shell-enable-smart-eshell t
+            )
      spell-checking
      syntax-checking
      version-control
-     chinese
+     (chinese :variables
+              chinese-enable-youdao-dict t)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
-                                      company-dcd
-                                      d-mode
-                                      format-all
                                       company-tabnine
                                       graphviz-dot-mode
                                       counsel-etags
@@ -69,7 +87,10 @@ values."
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(vi-tilde-fringe)
+   dotspacemacs-excluded-packages '(
+                                    vi-tilde-fringe
+                                    company
+                                    )
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and uninstall any
@@ -318,6 +339,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
         '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
           ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
           ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+
+  (setq-default git-magit-status-fullscreen t)
   )
 
 
@@ -334,6 +357,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (setq web-mode-code-indent-offset n) ; web-mode, js code in html file
   (setq css-indent-offset n) ; css-mode
   (setq d-mode-indent-offset n)
+
   )
 
 
@@ -344,6 +368,37 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  ;; layer配置
+  ;; --------------------------------------------------------------------------------
+
+  (global-git-commit-mode t)
+  ;; 显示配置
+  ;; --------------------------------------------------------------------------------
+
+
+  ;; 关闭工具栏
+  (tool-bar-mode -1)
+
+  ;; 关闭滚动栏
+  (scroll-bar-mode -1)
+
+  ;; 关闭菜单栏
+  (menu-bar-mode -1)
+
+  ;; 显示行号
+  (global-linum-mode 1)
+
+  ;; 不显示欢迎页面
+  (setq inhibit-splash-screen t)
+
+  ;; 高亮当前行
+  (global-hl-line-mode t)
+
+
+  ;; 默认配置
+  ;; --------------------------------------------------
+
 
   ;; 缩进
   (skyfire-setup-indent 4)
@@ -432,18 +487,11 @@ you should place your code here."
   ;; 包配置
   ;; ---------------------------------------------------------------------------------
 
-  ;; Dlang
-  (when (package-installed-p 'company-dcd)
-    (progn
-      (require 'company-dcd)
-      (add-hook 'd-mode-hook 'company-dcd-mode)
-      )
-    )
+
   ;; 保存文件前格式化
   (when (package-installed-p 'format-all)
     (progn
-      (add-hook 'before-save-hook 'format-all-buffer
-                )
+      (add-hook 'before-save-hook 'format-all-buffer)
       )
     )
 
@@ -509,8 +557,8 @@ you should place your code here."
       (global-flycheck-mode)
       )
     )
-  ;; 弹出窗
 
+  ;; 弹出窗
   (when (package-installed-p 'popwin)
     (progn
       (require 'popwin)
@@ -518,13 +566,11 @@ you should place your code here."
       )
     )
 
-
   ;; 侧边目录
   (when (package-installed-p 'neotree)
     (progn
       (require 'neotree)
       )
-
     )
 
 
@@ -539,6 +585,7 @@ you should place your code here."
       )
 
     )
+
   ;; 项目管理
   (when (package-installed-p 'projectile)
     (progn
@@ -559,6 +606,13 @@ you should place your code here."
   ;; ---------------------------------------------------------------------------------------
   ;; 快捷键配置
 
+
+  ;; Bind clang-format-region to C-M-tab in all modes:
+  (global-set-key [C-M-tab] 'clang-format-region)
+  ;; Bind clang-format-buffer to tab on the c++-mode only:
+  (add-hook 'c++-mode-hook 'clang-format-bindings)
+  (defun clang-format-bindings ()
+    (define-key c++-mode-map [tab] 'clang-format-buffer))
 
   ;; enable this if you want `swiper' to use it
   ;; (setq search-default-mode #'char-fold-to-regexp)
@@ -661,6 +715,9 @@ you should place your code here."
   (global-set-key (kbd "s-/") 'hippie-expand)
 
 
+  (global-set-key (kbd "M-m o y") 'youdao-dictionary-search-at-point+)
+
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -670,10 +727,13 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(cursor-type (quote (bar . 1)))
+ '(display-raw-bytes-as-hex t)
+ '(org-support-shift-select t)
  '(package-selected-packages
    (quote
-    (sql-indent graphviz-dot-mode format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
- '(standard-indent 8))
+    (disaster cmake-mode clang-format company-quickhelp youdao-dictionary chinese-word-at-point go-guru go-eldoc company-go go-mode sql-indent graphviz-dot-mode format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
+ '(standard-indent 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
