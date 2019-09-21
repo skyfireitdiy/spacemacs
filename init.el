@@ -35,7 +35,6 @@ values."
      sql
      lua
      d
-
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-enable-clang-support t
@@ -74,23 +73,20 @@ values."
      version-control
      (chinese :variables
               chinese-enable-youdao-dict t)
+
+
+     skyfire
+
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(
-                                      company-tabnine
-                                      graphviz-dot-mode
-                                      counsel-etags
-                                      )
+   dotspacemacs-additional-packages '()
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(
-                                    vi-tilde-fringe
-                                    company
-                                    )
+   dotspacemacs-excluded-packages '()
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and uninstall any
@@ -495,13 +491,6 @@ you should place your code here."
       )
     )
 
-  ;; 加载主题
-  (when (package-installed-p 'monokai-theme)
-    (progn
-      (load-theme 'monokai t)
-      )
-    )
-
   (package-installed-p 'swiper)
 
   ;; 优化删除
@@ -510,7 +499,6 @@ you should place your code here."
       (require 'hungry-delete)
       (global-hungry-delete-mode)
       )
-
     )
 
   ;; swiper 配置
@@ -520,7 +508,6 @@ you should place your code here."
       (setq ivy-use-virtual-buffers t)
       (setq enable-recursive-minibuffers t)
       )
-
     )
 
   ;; 括号自动完成
@@ -540,16 +527,6 @@ you should place your code here."
   (setq company-minimum-prefix-length 1)
   (setq company-auto-complete-chars nil)
   (setq company-tooltip-idle-delay 0.0)
-
-  ;; 机器学习自动完成
-  (when (package-installed-p 'company-tabnine)
-    (progn
-      (require 'company-tabnine)
-      (setq company-tabnine-insert-arguments nil)
-      (setq company-tabnine-wait 0.5)
-      (add-to-list 'company-backends #'company-tabnine)
-      )
-    )
 
   ;; 语法检查
   (when (package-installed-p 'flycheck)
@@ -571,19 +548,6 @@ you should place your code here."
     (progn
       (require 'neotree)
       )
-    )
-
-
-  ;; 迷你图
-  (when (package-installed-p 'sublimity)
-    (progn
-      (require 'sublimity)
-      (require 'sublimity-scroll)
-      (require 'sublimity-map) ;; experimental
-      ;;(require 'sublimity-attractive)
-      (sublimity-mode t)
-      )
-
     )
 
   ;; 项目管理
@@ -687,12 +651,6 @@ you should place your code here."
 
   (global-set-key (kbd "M-S-s") 'regexp-search)
 
-  (when (package-installed-p 'ace-window)
-    (progn
-      (global-set-key (kbd "C-o") 'ace-window)
-      )
-    )
-
   (global-set-key (kbd "C-S-g") 'goto-line)
 
   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
@@ -706,17 +664,9 @@ you should place your code here."
 
   (global-set-key (kbd "C-?") 'comment-or-uncomment-region)
 
-  (when (package-installed-p 'counsel-etags)
-    (progn
-      (global-set-key (kbd "<f12>") 'counsel-etags-find-tag-at-point)
-      )
-    )
+  (global-set-key (kbd "C-c o y") 'youdao-dictionary-search-at-point+)
 
-  (global-set-key (kbd "s-/") 'hippie-expand)
-
-
-  (global-set-key (kbd "M-m o y") 'youdao-dictionary-search-at-point+)
-
+  (global-set-key (kbd "C-`") 'spacemacs/default-pop-shell)
 
   )
 
@@ -732,7 +682,7 @@ you should place your code here."
  '(org-support-shift-select t)
  '(package-selected-packages
    (quote
-    (disaster cmake-mode clang-format company-quickhelp youdao-dictionary chinese-word-at-point go-guru go-eldoc company-go go-mode sql-indent graphviz-dot-mode format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
+    (company-c-headers disaster cmake-mode clang-format company-quickhelp youdao-dictionary chinese-word-at-point go-guru go-eldoc company-go go-mode sql-indent graphviz-dot-mode format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
  '(standard-indent 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
