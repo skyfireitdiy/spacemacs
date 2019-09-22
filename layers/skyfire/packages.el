@@ -33,6 +33,7 @@
   '(company-tabnine
     graphviz-dot-mode
     counsel-etags
+    format-all
     )
   "The list of Lisp packages required by the skyfire layer.
 
@@ -84,6 +85,12 @@ Each entry is either:
     (global-set-key (kbd "C-c e l") 'counsel-etags-list-tag)
     (global-set-key (kbd "C-c e r") 'counsel-etags-recent-tag)
     (global-set-key (kbd "C-c e s") 'counsel-etags-scan-code)
+    )
+  )
+
+(defun skyfire/init-format-all()
+  (progn
+    (add-hook 'before-save-hook 'format-all-buffer)
     )
   )
 

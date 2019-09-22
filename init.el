@@ -59,7 +59,8 @@ values."
       )
      emacs-lisp
      git
-     markdown
+     (markdown :variables
+               )
      org
      (shell :variables
             shell-default-height 30
@@ -304,7 +305,7 @@ values."
    dotspacemacs-highlight-delimiters 'all
    ;; If non nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
-   dotspacemacs-persistent-server nil
+   dotspacemacs-persistent-server t
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
    ;; (default '("ag" "pt" "ack" "grep"))
@@ -367,6 +368,24 @@ you should place your code here."
 
   ;; layer配置
   ;; --------------------------------------------------------------------------------
+
+
+  ;; (with-eval-after-load 'org
+  ;;   (org-babel-do-load-languages
+  ;;    'org-babel-load-languages
+  ;;    '((emacs-lisp . t)
+  ;;      (C . t)
+  ;;      (go . t)
+  ;;      (java . t)
+  ;;      (js . t)
+  ;;      (ruby . t)
+  ;;      (ditaa . t)
+  ;;      (python . t)
+  ;;      (shell . t)
+  ;;      (latex . t)
+  ;;      (plantuml . t)
+  ;;      (R . t)))
+  ;;   )
 
   (global-git-commit-mode t)
   ;; 显示配置
@@ -479,84 +498,20 @@ you should place your code here."
 
   (setq standard-indent 4)
 
-
   ;; 包配置
   ;; ---------------------------------------------------------------------------------
-
-
-  ;; 保存文件前格式化
-  (when (package-installed-p 'format-all)
-    (progn
-      (add-hook 'before-save-hook 'format-all-buffer)
-      )
-    )
-
-  (package-installed-p 'swiper)
-
-  ;; 优化删除
-  (when (package-installed-p 'hungry-delete)
-    (progn
-      (require 'hungry-delete)
-      (global-hungry-delete-mode)
-      )
-    )
-
-  ;; swiper 配置
-  (when (package-installed-p 'swiper)
-    (progn
-      (ivy-mode 1)
-      (setq ivy-use-virtual-buffers t)
-      (setq enable-recursive-minibuffers t)
-      )
-    )
-
-  ;; 括号自动完成
-  (when (package-installed-p 'smartparens)
-    (progn
-      (smartparens-global-mode t)
-      )
-    )
 
 
   ;; 自动完成
   (add-hook 'prog-mode-hook
             (lambda () (company-mode 1)))
+
   (setq company-idle-delay 0)
   (setq company-show-numbers t)
   (setq company-auto-complete nil)
   (setq company-minimum-prefix-length 1)
   (setq company-auto-complete-chars nil)
   (setq company-tooltip-idle-delay 0.0)
-
-  ;; 语法检查
-  (when (package-installed-p 'flycheck)
-    (progn
-      (global-flycheck-mode)
-      )
-    )
-
-  ;; 弹出窗
-  (when (package-installed-p 'popwin)
-    (progn
-      (require 'popwin)
-      (popwin-mode t)
-      )
-    )
-
-  ;; 侧边目录
-  (when (package-installed-p 'neotree)
-    (progn
-      (require 'neotree)
-      )
-    )
-
-  ;; 项目管理
-  (when (package-installed-p 'projectile)
-    (progn
-      (projectile-global-mode)
-      (setq projectile-enable-caching t)
-      )
-    )
 
   ;; 缩进线
   (when (package-installed-p 'indent-guide)
@@ -653,15 +608,6 @@ you should place your code here."
 
   (global-set-key (kbd "C-S-g") 'goto-line)
 
-  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-
-  (when (package-installed-p 'projectile)
-    (progn
-      (global-set-key (kbd "C-S-f") 'projectile-find-file)
-      )
-    )
-
-
   (global-set-key (kbd "C-?") 'comment-or-uncomment-region)
 
   (global-set-key (kbd "C-c o y") 'youdao-dictionary-search-at-point+)
@@ -683,7 +629,7 @@ you should place your code here."
  '(org-support-shift-select t)
  '(package-selected-packages
    (quote
-    (company-c-headers disaster cmake-mode clang-format company-quickhelp youdao-dictionary chinese-word-at-point go-guru go-eldoc company-go go-mode sql-indent graphviz-dot-mode format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
+    (vmd-mode company-c-headers disaster cmake-mode clang-format company-quickhelp youdao-dictionary chinese-word-at-point go-guru go-eldoc company-go go-mode sql-indent graphviz-dot-mode format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
  '(standard-indent 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
