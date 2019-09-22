@@ -370,22 +370,23 @@ you should place your code here."
   ;; --------------------------------------------------------------------------------
 
 
-  ;; (with-eval-after-load 'org
-  ;;   (org-babel-do-load-languages
-  ;;    'org-babel-load-languages
-  ;;    '((emacs-lisp . t)
-  ;;      (C . t)
-  ;;      (go . t)
-  ;;      (java . t)
-  ;;      (js . t)
-  ;;      (ruby . t)
-  ;;      (ditaa . t)
-  ;;      (python . t)
-  ;;      (shell . t)
-  ;;      (latex . t)
-  ;;      (plantuml . t)
-  ;;      (R . t)))
-  ;;   )
+  (require 'org-tempo)
+
+  (with-eval-after-load 'org
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (C . t)
+       (java . t)
+       (js . t)
+       (ruby . t)
+       (ditaa . t)
+       (python . t)
+       (shell . t)
+       (latex . t)
+       (plantuml . t)
+       (R . t)))
+    )
 
   (global-git-commit-mode t)
   ;; 显示配置
