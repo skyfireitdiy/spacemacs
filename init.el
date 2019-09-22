@@ -64,7 +64,7 @@ values."
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
-            shell-default-term-shell "/usr/bin/fish"
+            shell-default-term-shell "/bin/bash"
             shell-default-full-span nil
             shell-enable-smart-eshell t
             )
@@ -668,6 +668,7 @@ you should place your code here."
 
   (global-set-key (kbd "C-`") 'spacemacs/default-pop-shell)
 
+  (global-set-key (kbd "C-x o") 'ace-window)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
