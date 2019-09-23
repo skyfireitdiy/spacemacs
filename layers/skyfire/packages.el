@@ -34,6 +34,7 @@
     graphviz-dot-mode
     counsel-etags
     format-all
+    ob-go
     )
   "The list of Lisp packages required by the skyfire layer.
 
@@ -91,6 +92,11 @@ Each entry is either:
 (defun skyfire/init-format-all()
   (progn
     (add-hook 'before-save-hook 'format-all-buffer)
+    )
+  )
+
+(defun skyfire/init-ob-go()
+  (progn
     )
   )
 

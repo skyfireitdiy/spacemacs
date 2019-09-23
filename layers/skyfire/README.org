@@ -1,7 +1,6 @@
 #+TITLE: skyfire layer
 
-# The maximum height of the logo should be 200 pixels.
-[[img/skyfire.png]]
+
 
 # TOC links should be GitHub style anchors.
 * Table of Contents                                        :TOC_4_gh:noexport:
@@ -10,8 +9,17 @@
 - [[#key-bindings][Key bindings]]
 
 * Description
-This layer does wonderful things:
-  - thing01
+ skyfire layer包含了以下组件
+ - company-tabnine
+  基于深度学习的自动完成插件
+ - graphviz-dot-mode
+  graphviz dot语言支持
+ - counsel-etags
+  etags 跳转支持
+ - format-all
+  格式化支持
+ - ob-go 
+  org-mode中对go代码的执行支持
 
 * Install
 To use this configuration layer, add it to your =~/.spacemacs=. You will need to
@@ -20,11 +28,11 @@ file.
 
 * Key bindings
 
-| Key Binding | Description    |
-|-------------+----------------|
-| ~SPC x x x~ | Does thing01   |
-# Use GitHub URLs if you wish to link a Spacemacs documentation file or its heading.
-# Examples:
-# [[https://github.com/syl20bnr/spacemacs/blob/master/doc/VIMUSERS.org#sessions]]
-# [[https://github.com/syl20bnr/spacemacs/blob/master/layers/%2Bfun/emoji/README.org][Link to Emoji layer README.org]]
-# If space-doc-mode is enabled, Spacemacs will open a local copy of the linked file.
+| Key Binding | Description      |
+|-------------+------------------|
+| ~<f12>~     | 查找光标处的符号 |
+| ~C-c e f~   | 查找符号         |
+| ~C-c e s~   | 正则查找         |
+| ~C-c e r~   | 上一个tag        |
+| ~C-c e s~   | 扫描代码         |
+| ~C-c e l~   | 列出所有符号           |
