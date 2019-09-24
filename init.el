@@ -76,15 +76,19 @@ values."
      (chinese :variables
               chinese-enable-youdao-dict t)
 
-
-     skyfire
-
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      company-tabnine
+                                      graphviz-dot-mode
+                                      counsel-etags
+                                      format-all
+                                      ob-go
+                                      paredit
+                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -373,12 +377,16 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  ;; layer配置
-  ;; --------------------------------------------------------------------------------
+  ;; tabnine 配置
+  (require 'company-tabnine)
+  (setq company-tabnine-insert-arguments nil)
+  (setq company-tabnine-wait 0.5)
+  (add-to-list 'company-backends #'company-tabnine)
 
-
+  ;; org-mode下 <s TAB生成源码标记
   (require 'org-tempo)
 
+  ;; org-mode 代码执行
   (with-eval-after-load 'org
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -420,9 +428,8 @@ you should place your code here."
   (global-hl-line-mode t)
 
 
-  ;; 默认配置
-  ;; --------------------------------------------------
-
+  ;; 保存文件自动格式化
+  (add-hook 'before-save-hook 'format-all-buffer)
 
   ;; 缩进
   (skyfire-setup-indent 4)
@@ -493,6 +500,7 @@ you should place your code here."
                                            try-complete-lisp-symbol
                                            ))
 
+  ;; 删除文件夹和拷贝文件夹的时候不提示
   (setq dired-recursive-deletes 'always)
   (setq dired-recursive-copies 'always)
 
@@ -502,9 +510,11 @@ you should place your code here."
 
   (require 'dired-x)
 
+  ;; 单引号不自动补全
   (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
   (sp-local-pair 'lisp-interaction-mode "'" nil :actions nil)
 
+  ;; 标准缩进
   (setq standard-indent 4)
 
   ;; 包配置
@@ -527,7 +537,6 @@ you should place your code here."
     (progn
       (indent-guide-global-mode)
       )
-
     )
 
 
@@ -535,52 +544,10 @@ you should place your code here."
   ;; 快捷键配置
 
 
-  ;; enable this if you want `swiper' to use it
-  ;; (setq search-default-mode #'char-fold-to-regexp)
-
-  (when (package-installed-p 'swiper)
-    (progn
-      (global-set-key (kbd "C-s") 'swiper)
-      (global-set-key (kbd "C-c C-r") 'ivy-resume)
-      )
-    )
-
-  (when (package-installed-p 'counsel)
-    (progn
-      (global-set-key (kbd "M-x") 'counsel-M-x)
-      (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-      (global-set-key (kbd "C-h C-f") 'counsel-describe-function)
-      (global-set-key (kbd "C-h C-v") 'counsel-describe-variable)
-      (global-set-key (kbd "C-h C-l") 'counsel-find-library)
-      (global-set-key (kbd "C-h C-i") 'counsel-info-lookup-symbol)
-      )
-    )
-
 
   (global-set-key (kbd "C-h C-k") 'find-function-on-key)
 
-  (when (package-installed-p 'neotree)
-    (progn
-      (global-set-key (kbd "<f8>") 'neotree-toggle)
-      )
-    )
-
-
-  ;;(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  ;;(global-set-key (kbd "C-c g") 'counsel-git)
-  ;;(global-set-key (kbd "C-c j") 'counsel-git-grep)
-  ;;(global-set-key (kbd "C-c k") 'counsel-ag)
-  ;;(global-set-key (kbd "C-x l") 'counsel-locate)
-  ;;(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  ;;(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-
-  ;; 打开配置文件
-  ;;(global-set-key (kbd "C-c <f1>") 'skyfire-open-init)
-  ;;(global-set-key (kbd "C-c <f2>") 'skyfire-open-init-packages)
-  ;;(global-set-key (kbd "C-c <f3>") 'skyfire-open-init-keymap)
-  ;;(global-set-key (kbd "C-c <f4>") 'skyfire-open-init-ui)
-  ;;(global-set-key (kbd "C-c <f5>") 'skyfire-open-init-better-defaults)
-  ;;(global-set-key (kbd "C-c <f6>") 'skyfire-open-init-func)
+  (global-set-key (kbd "<f8>") 'neotree-toggle)
 
   (global-set-key (kbd "C-S-\\") 'indent-region-or-buffer)
 
@@ -619,6 +586,15 @@ you should place your code here."
   (global-set-key (kbd "C-c s r") 'recentf-open-files)
 
   (global-set-key (kbd "C-c s y") 'youdao-dictionary-search-at-point+)
+
+
+  ;; counsel-etags 快捷键配置
+  (global-set-key (kbd "<f12>") 'counsel-etags-find-tag-at-point)
+  (global-set-key (kbd "C-c e f") 'counsel-etags-find-tag)
+  (global-set-key (kbd "C-c e s") 'counsel-etags-grep)
+  (global-set-key (kbd "C-c e l") 'counsel-etags-list-tag)
+  (global-set-key (kbd "C-c e r") 'counsel-etags-recent-tag)
+  (global-set-key (kbd "C-c e s") 'counsel-etags-scan-code)
 
   )
 
