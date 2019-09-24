@@ -35,6 +35,7 @@
     counsel-etags
     format-all
     ob-go
+    paredit
     )
   "The list of Lisp packages required by the skyfire layer.
 
@@ -96,6 +97,11 @@ Each entry is either:
   )
 
 (defun skyfire/init-ob-go()
+  (progn
+    )
+  )
+
+(defun skyfire/init-paredit()
   (progn
     )
   )

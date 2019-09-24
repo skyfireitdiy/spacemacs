@@ -9,18 +9,19 @@
 - [[#key-bindings][Key bindings]]
 
 * Description
- skyfire layer包含了以下组件
+ skyfire layer 包含了以下组件
  - company-tabnine
   基于深度学习的自动完成插件
  - graphviz-dot-mode
-  graphviz dot语言支持
+  graphviz dot 语言支持
  - counsel-etags
   etags 跳转支持
  - format-all
   格式化支持
  - ob-go 
-  org-mode中对go代码的执行支持
-
+  org-mode 中对 go 代码的执行支持
+ - paredit
+  对括号编辑的优化
 * Install
 To use this configuration layer, add it to your =~/.spacemacs=. You will need to
 add =skyfire= to the existing =dotspacemacs-configuration-layers= list in this
@@ -33,6 +34,6 @@ file.
 | ~<f12>~     | 查找光标处的符号 |
 | ~C-c e f~   | 查找符号         |
 | ~C-c e s~   | 正则查找         |
-| ~C-c e r~   | 上一个tag        |
+| ~C-c e r~   | 上一个 tag        |
 | ~C-c e s~   | 扫描代码         |
 | ~C-c e l~   | 列出所有符号           |
