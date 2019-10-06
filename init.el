@@ -37,7 +37,8 @@ values."
      d
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
-            )     helm
+            )
+     helm
      (auto-completion
       :variables
       auto-completion-return-key-behavior 'complete
@@ -167,6 +168,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
           ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
   (setq-default git-magit-status-fullscreen t)
   )
+
+
 (defun skyfire-setup-indent (n)
   (setq c-basic-offset n)
   (setq coffee-tab-width n)
@@ -310,6 +313,24 @@ you should place your code here."
   (global-set-key (kbd "C-c e r") 'counsel-etags-recent-tag)
   (global-set-key (kbd "C-c e s") 'counsel-etags-scan-code)  )
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-auto-complete-chars nil)
+ '(company-backends
+   (quote
+    (company-tabnine company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-capf company-files
+                     (company-dabbrev-code company-gtags company-etags company-keywords)
+                     company-oddmuse company-dabbrev)))
+ '(company-idle-delay 0)
+ '(company-minimum-prefix-length 1)
+ '(company-require-match nil)
+ '(company-show-numbers t)
+ '(company-tooltip-idle-delay 0.0)
+ '(company-transformers
+   (quote
+    (spacemacs//company-transformer-cancel company-sort-by-occurrence company-sort-by-statistics)))
  '(cursor-type (quote (bar . 1)))
  '(display-raw-bytes-as-hex t)
  '(org-support-shift-select t)
@@ -318,4 +339,8 @@ you should place your code here."
     (web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data paredit web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern tern coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic ob-go vmd-mode company-c-headers disaster cmake-mode clang-format company-quickhelp youdao-dictionary chinese-word-at-point go-guru go-eldoc company-go go-mode sql-indent graphviz-dot-mode format-all counsel-etags company-tabnine unicode-escape names pyim pyim-basedict xr pangu-spacing find-by-pinyin-dired ace-pinyin pinyinlib wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper lua-mode d-mode company-dcd ivy flycheck-dmd-dub xterm-color unfill smeargle shell-pop orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
  '(standard-indent 4))
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
